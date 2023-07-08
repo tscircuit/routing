@@ -1,16 +1,9 @@
-type Path = {
-  points: Array<{ x: number; y: number }>
-  width: number
-}
+import type { Grid, Point, Path, Obstacle } from "../lib/types"
 
 type Props = {
-  points: Array<{ x: number; y: number }>
-  grid: { lineDistanceX: number; lineDistanceY: number }
-  obstacles: Array<{
-    center: { x: number; y: number }
-    width: number
-    height: number
-  }>
+  points: Array<Point>
+  grid: Grid
+  obstacles: Array<Obstacle>
   paths: Path[]
   viewBox: { width: number; height: number; topLeftX: number; topLeftY: number }
   width: number
@@ -39,31 +32,26 @@ export const RouterBoard = ({
       <svg width={width} height={height} viewBox={svgViewBox}>
         {/* Render grid */}
         {Array.from({
-          length: Math.ceil(width / grid.lineDistanceX) + 1,
+          length: Math.ceil(width / grid.segmentSize) + 1,
         }).map((_, x) => (
           <line
-            x1={x * grid.lineDistanceX}
+            x1={x * grid.segmentSize}
             y1={0}
-            x2={x * grid.lineDistanceX}
+            x2={x * grid.segmentSize}
             y2={viewBox.height}
             stroke="lightgray"
           />
         ))}
         {Array.from({
-          length: Math.ceil(height / grid.lineDistanceY) + 1,
+          length: Math.ceil(height / grid.segmentSize) + 1,
         }).map((_, y) => (
           <line
             x1={0}
-            y1={y * grid.lineDistanceY}
+            y1={y * grid.segmentSize}
             x2={viewBox.width}
-            y2={y * grid.lineDistanceY}
+            y2={y * grid.segmentSize}
             stroke="lightgray"
           />
-        ))}
-
-        {/* Render points */}
-        {points.map((point, index) => (
-          <circle cx={point.x} cy={point.y} r={0.5} fill="blue" key={index} />
         ))}
 
         {/* Render obstacles */}
@@ -87,6 +75,11 @@ export const RouterBoard = ({
             fill="none"
             key={index}
           />
+        ))}
+
+        {/* Render points */}
+        {points.map((point, index) => (
+          <circle cx={point.x} cy={point.y} r={1.5} fill="blue" key={index} />
         ))}
       </svg>
     </div>

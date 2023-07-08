@@ -1,64 +1,49 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import { RouterBoard } from "../components/RouterBoard"
+import { findTwoPointRoute } from "../lib/find-two-point-route"
+import { Path } from "../lib/types"
 
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
-const meta: Meta<typeof Button> = {
-  title: "RouterBoard/Test",
+const meta: Meta<typeof RouterBoard> = {
+  title: "Routing/SimpleTwoRoute",
   component: RouterBoard,
-  tags: ["autodocs"],
-  argTypes: {
-    backgroundColor: {
-      control: "color",
-    },
-  },
+  tags: [],
+  argTypes: {},
 }
 
 export default meta
 type Story = StoryObj<typeof RouterBoard>
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
+const scenario = {
+  points: [
+    { x: 10, y: 10 },
+    { x: 80, y: 80 },
+  ],
+  obstacles: [
+    {
+      center: { x: 80, y: 60 },
+      width: 40,
+      height: 10,
+    },
+    {
+      center: { x: 70, y: 70 },
+      width: 15,
+      height: 15,
+    },
+  ],
+  grid: { segmentSize: 10, marginSegments: 1 },
+}
+
+const ignoreIfNotFound = (path: Path | { pathFound: false }): Path =>
+  path as any
+
 export const Primary: Story = {
   args: {
-    points: [
-      { x: 10, y: 10 },
-      { x: 20, y: 10 },
-      { x: 30, y: 10 },
-      { x: 40, y: 10 },
-      { x: 50, y: 10 },
-    ],
-    grid: { lineDistanceX: 10, lineDistanceY: 10 },
-    obstacles: [
-      {
-        center: { x: 60, y: 60 },
-        width: 10,
-        height: 10,
-      },
-      {
-        center: { x: 70, y: 70 },
-        width: 15,
-        height: 15,
-      },
-    ],
+    ...scenario,
     paths: [
-      {
-        points: [
-          { x: 10, y: 10 },
-          { x: 20, y: 20 },
-          { x: 30, y: 30 },
-          { x: 40, y: 40 },
-          { x: 50, y: 50 },
-        ],
-        width: 2,
-      },
-      {
-        points: [
-          { x: 10, y: 10 },
-          { x: 20, y: 20 },
-          { x: 30, y: 30 },
-        ],
-        width: 1,
-      },
+      ignoreIfNotFound(
+        findTwoPointRoute({ ...scenario, pointsToConnect: scenario.points })
+      ),
     ],
     viewBox: {
       topLeftX: 0,

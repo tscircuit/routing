@@ -20,6 +20,7 @@
     "@storybook/react": "^7.0.26",
     "@storybook/testing-library": "^0.0.14-next.2",
     "@types/node": "20.3.3",
+    "@types/pathfinding": "^0.0.6",
     "@types/react": "18.2.14",
     "next": "^13.4.8",
     "react": "^18.2.0",
