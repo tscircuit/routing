@@ -102,7 +102,7 @@ export const findBestBorderTargetPaths = ({
   })
 
   // // Order the borderPoints by their distance to the distantTarget
-  // borderPoints.sort((a, b) => a.targetDistance - b.targetDistance)
+  closestBorderPoints.sort((a, b) => a.targetDistance - b.targetDistance)
 
   // First borderPoint with a path to the distantTarget is the best borderPoint
   const resultPaths: Array<FoundPath<{ borderTarget: Point }>> = []
@@ -119,6 +119,5 @@ export const findBestBorderTargetPaths = ({
       })
     }
   }
-  console.log("resultPaths", resultPaths)
   return resultPaths
 }
