@@ -1,43 +1,17 @@
 import * as PF from "pathfinding"
-
-type Obstacle = {
-  center: { x: number; y: number }
-  width: number
-  height: number
-}
-
-type Point = { x: number; y: number }
-
-type Path = {
-  points: Array<{ x: number; y: number }>
-  width: number
-}
+import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
 
 type Parameters = {
   pointsToConnect: Point[]
   obstacles: Obstacle[]
-  grid: {
-    /**
-     * The segmentSize is the smallest distance between two adjacent paths, or
-     * between an obstacle and a path. When path-finding, this is the width and
-     * height of a single grid square.
-     */
-    segmentSize: number
-    /**
-     * The grid region is formed based on the pointsToConnect and the margin.
-     * The margin is the buffer or extra space outside of the region formed by
-     * pointsToConnect that is still part of the grid region. This is typically
-     * set to 1 or 2
-     */
-    marginSegments: number
-  }
+  grid: Grid
 }
 
 export const findTwoPointRoute = ({
   pointsToConnect,
   obstacles,
   grid,
-}: Parameters): (Path & { pathFound: true }) | { pathFound: false } => {
+}: Parameters): PathFindingResult => {
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
 
@@ -103,7 +77,7 @@ export const findTwoPointRoute = ({
 
   // const finder = new PF.BestFirstFinder()
   const finder = new PF.AStarFinder({
-    diagonalMovement: PF.DiagonalMovement.Always,
+    diagonalMovement: PF.DiagonalMovement.OnlyWhenNoObstacles,
   })
   const path = finder.findPath(
     startNode.x,
@@ -121,9 +95,17 @@ export const findTwoPointRoute = ({
   // Convert node space to real space
   const realPath = path.map(([x, y]) => nodeToRealSpace({ x, y }))
 
+  // Compute length of route
+  const length = realPath.reduce((acc, p, i) => {
+    if (i === 0) return acc
+    const prev = realPath[i - 1]
+    return acc + Math.sqrt((p.x - prev.x) ** 2 + (p.y - prev.y) ** 2)
+  }, 0)
+
   return {
     pathFound: true,
     points: realPath,
+    length,
     width: 1,
   }
 }

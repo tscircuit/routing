@@ -26,3 +26,7 @@ export type Grid = {
    */
   marginSegments: number
 }
+
+export type PathFindingResult =
+  | (Path & { length: number; pathFound: true })
+  | { pathFound: false }
