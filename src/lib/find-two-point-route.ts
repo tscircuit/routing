@@ -75,7 +75,6 @@ export const findTwoPointRoute = ({
     }
   })
 
-  // const finder = new PF.BestFirstFinder()
   const finder = new PF.AStarFinder({
     diagonalMovement: PF.DiagonalMovement.OnlyWhenNoObstacles,
   })
@@ -92,8 +91,10 @@ export const findTwoPointRoute = ({
     return { pathFound: false }
   }
 
+  const optimizedPath = PF.Util.compressPath(path)
+
   // Convert node space to real space
-  const realPath = path.map(([x, y]) => nodeToRealSpace({ x, y }))
+  const realPath = optimizedPath.map(([x, y]) => nodeToRealSpace({ x, y }))
 
   // Compute length of route
   const length = realPath.reduce((acc, p, i) => {

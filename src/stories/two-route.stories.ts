@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import { RouterBoard } from "../components/RouterBoard"
 import { findTwoPointRoute } from "../lib/find-two-point-route"
-import { Path } from "../lib/types"
+import { Path, PathFindingResult } from "../lib/types"
 
 const meta: Meta<typeof RouterBoard> = {
   title: "Routing/SimpleTwoRoute",
@@ -22,7 +22,7 @@ const scenario = {
   obstacles: [
     {
       center: { x: 80, y: 60 },
-      width: 40,
+      width: 35,
       height: 10,
     },
     {
@@ -34,14 +34,19 @@ const scenario = {
   grid: { segmentSize: 10, marginSegments: 1 },
 }
 
-const ignoreIfNotFound = (path: Path | { pathFound: false }): Path =>
-  path as any
+const throwIfNotFound = (path: PathFindingResult): Path => {
+  if (path.pathFound === false) {
+    throw new Error("Path not found")
+  } else {
+    return path
+  }
+}
 
 export const Primary: Story = {
   args: {
     ...scenario,
     paths: [
-      ignoreIfNotFound(
+      throwIfNotFound(
         findTwoPointRoute({ ...scenario, pointsToConnect: scenario.points })
       ),
     ],
