@@ -1,5 +1,5 @@
 import * as PF from "pathfinding"
-import { findTwoPointRoute } from "./find-two-point-route"
+import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
 import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
 
 type Parameters = {
@@ -37,7 +37,7 @@ export const findRoute = ({
     const pointB = pointsToConnect[i + 1]
 
     // Find a route between the two points
-    const pathResult: PathFindingResult = findTwoPointRoute({
+    const pathResult: PathFindingResult = findTwoPointGranularRoute({
       pointsToConnect: [pointA, pointB],
       obstacles,
       grid,

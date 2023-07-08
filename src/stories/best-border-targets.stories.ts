@@ -4,9 +4,10 @@ import { RouterBoard } from "../components/RouterBoard"
 import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
 import { Path, PathFindingResult } from "../lib/types"
 import { findRoute } from "../lib/find-route"
+import { findBestBorderTargetPaths } from "../lib/find-best-border-target-path"
 
 const meta: Meta<typeof RouterBoard> = {
-  title: "Routing/MultiPointRoutes",
+  title: "Routing/BestBorderTarget",
   component: RouterBoard,
   tags: [],
   argTypes: {},
@@ -16,21 +17,13 @@ export default meta
 type Story = StoryObj<typeof RouterBoard>
 
 const scenario = {
-  points: [
-    { x: 10, y: 10 },
-    { x: 80, y: 80 },
-    { x: 110, y: 20 },
-  ],
+  A: { x: 10, y: 10 },
+  distantTarget: { x: 80, y: 80 },
   obstacles: [
     {
       center: { x: 80, y: 60 },
-      width: 35,
-      height: 10,
-    },
-    {
-      center: { x: 70, y: 70 },
-      width: 15,
-      height: 15,
+      width: 66,
+      height: 30,
     },
     {
       center: { x: 40, y: 30 },
@@ -38,15 +31,23 @@ const scenario = {
       height: 35,
     },
     {
-      center: { x: 70, y: 10 },
+      center: { x: 80, y: 10 },
       width: 15,
-      height: 55,
+      height: 80,
     },
   ],
   grid: { segmentSize: 10, marginSegments: 3 },
 }
 
-const throwIfNotFound = (path: PathFindingResult): Path => {
+const borderTargetPaths = findBestBorderTargetPaths({
+  point: scenario.A,
+  distantTarget: scenario.distantTarget,
+  distanceToBorder: 50,
+  grid: scenario.grid,
+  obstacles: scenario.obstacles,
+})
+
+const throwIfNotFound = (path: PathFindingResult<any>): Path => {
   if (path.pathFound === false) {
     throw new Error("Path not found")
   } else {
@@ -57,11 +58,12 @@ const throwIfNotFound = (path: PathFindingResult): Path => {
 export const Primary: Story = {
   args: {
     ...scenario,
-    paths: [
-      throwIfNotFound(
-        findRoute({ ...scenario, pointsToConnect: scenario.points })
-      ),
+    points: [
+      scenario.A,
+      scenario.distantTarget,
+      ...borderTargetPaths.map((p) => p.borderTarget),
     ],
+    paths: borderTargetPaths,
     viewBox: {
       topLeftX: 0,
       topLeftY: 0,

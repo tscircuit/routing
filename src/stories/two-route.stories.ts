@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
 import { RouterBoard } from "../components/RouterBoard"
-import { findTwoPointRoute } from "../lib/find-two-point-route"
+import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
 import { Path, PathFindingResult } from "../lib/types"
 
 const meta: Meta<typeof RouterBoard> = {
@@ -47,7 +47,10 @@ export const Primary: Story = {
     ...scenario,
     paths: [
       throwIfNotFound(
-        findTwoPointRoute({ ...scenario, pointsToConnect: scenario.points })
+        findTwoPointGranularRoute({
+          ...scenario,
+          pointsToConnect: scenario.points,
+        })
       ),
     ],
     viewBox: {

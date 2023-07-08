@@ -27,6 +27,14 @@ export type Grid = {
   marginSegments: number
 }
 
-export type PathFindingResult =
-  | (Path & { length: number; pathFound: true })
+export type PathFindingParameters = {
+  pointsToConnect: Point[]
+  obstacles: Obstacle[]
+  grid: Grid
+}
+
+export type FoundPath<T> = Path & { length: number; pathFound: true } & T
+
+export type PathFindingResult<T = Record<string, never>> =
+  | FoundPath<T>
   | { pathFound: false }
