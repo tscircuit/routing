@@ -89,26 +89,6 @@ export const findBestBorderTargetPaths = ({
     }
   }
 
-  // Combine the first and last segment if they're connected (currently
-  // there's always an extra segment at the end)
-  // const lastSegment = contiguousBorderPoints[contiguousBorderPoints.length - 1]
-  // const joinResult = findTwoPointGranularRoute({
-  //   pointsToConnect: [
-  //     contiguousBorderPoints[0][0],
-  //     lastSegment[lastSegment.length - 1],
-  //   ],
-  //   grid,
-  //   obstacles,
-  // })
-  // if (
-  //   joinResult.pathFound === true &&
-  //   joinResult.length < grid.segmentSize * 2
-  // ) {
-  //   contiguousBorderPoints[0].push(
-  //     ...(contiguousBorderPoints.pop() as typeof borderPoints)
-  //   )
-  // }
-
   // Find the closest borderPoint of each contiguous set
   const closestBorderPoints = contiguousBorderPoints.map((borderPoints) => {
     return borderPoints.reduce(
@@ -120,7 +100,6 @@ export const findBestBorderTargetPaths = ({
       { x: 0, y: 0, targetDistance: Infinity }
     )
   })
-  console.log("closestBorderPoints", closestBorderPoints)
 
   // // Order the borderPoints by their distance to the distantTarget
   // borderPoints.sort((a, b) => a.targetDistance - b.targetDistance)

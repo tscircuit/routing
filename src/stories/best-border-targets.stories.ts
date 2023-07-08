@@ -35,6 +35,11 @@ const scenario = {
       width: 15,
       height: 80,
     },
+    {
+      center: { x: 10, y: 50 },
+      width: 10,
+      height: 30,
+    },
   ],
   grid: { segmentSize: 10, marginSegments: 3 },
 }
@@ -65,8 +70,8 @@ export const Primary: Story = {
     ],
     paths: borderTargetPaths,
     viewBox: {
-      topLeftX: 0,
-      topLeftY: 0,
+      topLeftX: -10,
+      topLeftY: -10,
       width: (8 / 5) * 100,
       height: 100,
     },
