@@ -1,10 +1,11 @@
 {
-  "name": "simple-route",
+  "name": "@tscircuit/routing",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "next dev",
+    "build": "tsup ./src/index.ts --dts --outDir ./dist",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -26,6 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.0.26",
+    "tsup": "^7.1.0",
     "typescript": "5.1.6"
   },
   "dependencies": {
