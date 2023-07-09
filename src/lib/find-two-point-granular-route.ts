@@ -109,5 +109,5 @@ export const findTwoPointGranularRoute = ({
     points: realPath,
     length,
     width: 1,
-  }
+  } as PathFindingResult
 }

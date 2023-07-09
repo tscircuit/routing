@@ -46,7 +46,7 @@ const scenario = {
   grid: {
     segmentSize: 10,
     marginSegments: 3,
-    maxGranularSearchSegments: 5,
+    maxGranularSearchSegments: 50,
   } as Grid,
 }
 

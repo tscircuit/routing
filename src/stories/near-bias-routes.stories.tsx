@@ -7,7 +7,7 @@ import { findRoute } from "../lib/find-route"
 import { findBestBorderTargetPaths } from "../lib/find-best-border-target-paths"
 import { findTwoPointNearBiasRoute } from "../lib/find-two-point-near-bias-route"
 
-const throwIfNotFound = (path: PathFindingResult<any>): Path => {
+const throwIfNotFound = (path: PathFindingResult): Path => {
   if (path.pathFound === false) {
     throw new Error("Path not found")
   } else {

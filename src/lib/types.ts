@@ -40,11 +40,11 @@ export type PathFindingParameters = {
   grid: Grid
 }
 
-export type FoundPath<T = Record<string, never>> = Path & {
+export type FoundPath = Path & {
   length: number
   pathFound: true
-} & T
+}
 
-export type PathFindingResult<T = Record<string, never>> =
-  | FoundPath<T>
+export type PathFindingResult =
+  | FoundPath
   | { pathFound: false; message?: string }

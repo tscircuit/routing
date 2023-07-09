@@ -39,7 +39,7 @@ export const findBestBorderTargetPaths = ({
   point: Point
   distantTarget: Point
   distanceToBorder: number
-}): Array<FoundPath<{ borderTarget: Point }>> => {
+}): Array<FoundPath & { borderTarget: Point }> => {
   const { roundToNearestGridPoint } = computeGridTransform({ grid })
 
   const borderPoints: Array<{ x: number; y: number; targetDistance: number }> =

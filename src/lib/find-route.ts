@@ -1,6 +1,7 @@
 import * as PF from "pathfinding"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
 import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
+import { findTwoPointNearBiasRoute } from "./find-two-point-near-bias-route"
 
 type Parameters = {
   pointsToConnect: Point[]
@@ -37,7 +38,7 @@ export const findRoute = ({
     const pointB = pointsToConnect[i + 1]
 
     // Find a route between the two points
-    const pathResult: PathFindingResult = findTwoPointGranularRoute({
+    const pathResult: PathFindingResult = findTwoPointNearBiasRoute({
       pointsToConnect: [pointA, pointB],
       obstacles,
       grid,
@@ -53,6 +54,6 @@ export const findRoute = ({
   }
 
   return pathFound
-    ? { points, length: totalLength, width: 1, pathFound }
+    ? { points, length: totalLength, width: 1, pathFound: true }
     : { pathFound: false }
 }
