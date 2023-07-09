@@ -74,6 +74,30 @@ export const findBestBorderTargetPaths = ({
     const A = borderPoints[i - 1]
     const B = borderPoints[i]
 
+    // HACK: Prevents one continuous border region representing a split junction
+    // Before this:
+    // ##########
+    // #        #
+    // # A    W W W
+    // #        #
+    // #        X              B
+    // ##########
+    // After this:
+    // ##########
+    // #        X <---- New border point, technically a continuous region, but
+    // # A    W W W     so far separated better to keep it separate
+    // #        #
+    // #        X              B
+    // ##########
+    if (
+      contiguousBorderPoints[contiguousBorderPoints.length - 1].length >
+      borderPoints.length - 2
+    ) {
+      contiguousBorderPoints.push([B])
+      continue
+    }
+    // END HACK
+
     // TODO this could be optimized since the distance between these points
     // is generally one grid segment
     const result = findTwoPointGranularRoute({

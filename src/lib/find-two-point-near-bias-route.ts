@@ -24,8 +24,6 @@ export const findTwoPointNearBiasRoute = ({
   const remainingSegDist =
     Math.max(Math.abs(A.x - B.x), Math.abs(A.y - B.y)) / grid.segmentSize
 
-  console.log({ depth, remainingSegDist })
-
   if (remainingSegDist <= grid.maxGranularSearchSegments) {
     return findTwoPointGranularRoute({
       pointsToConnect,
@@ -34,14 +32,12 @@ export const findTwoPointNearBiasRoute = ({
     })
   }
 
-  if (depth > 2) return { pathFound: false, message: "Max depth reached" }
+  if (depth > 3) return { pathFound: false, message: "Max depth reached" }
 
   const distanceToBorder = Math.min(
     grid.segmentSize * grid.maxGranularSearchSegments,
-    (remainingSegDist / 2) * grid.segmentSize
+    (remainingSegDist / 2 - 3) * grid.segmentSize
   )
-
-  console.log({ distanceToBorder })
 
   const ABP = findBestBorderTargetPaths({
     point: A,
@@ -58,8 +54,6 @@ export const findTwoPointNearBiasRoute = ({
     distanceToBorder,
     distantTarget: A,
   })
-
-  console.log({ ABP, BBP })
 
   // Go through every combination of A border points and B border points, and
   // select the best path

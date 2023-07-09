@@ -63,7 +63,30 @@ const NearBiasRoute = ({ A, B }: { A: Point; B: Point }) => {
     })
   )
 
-  return <RouterBoard {...scenario} paths={[route]} />
+  const btA = findBestBorderTargetPaths({
+    point: A,
+    distantTarget: B,
+    distanceToBorder: 40,
+    grid: scenario.grid,
+    obstacles: scenario.obstacles,
+  })
+
+  const btB = findBestBorderTargetPaths({
+    point: B,
+    distantTarget: A,
+    distanceToBorder: 40,
+    grid: scenario.grid,
+    obstacles: scenario.obstacles,
+  })
+
+  return (
+    <>
+      <RouterBoard {...scenario} paths={[route]} />
+      <h2>Initial Border Points</h2>
+      <RouterBoard {...scenario} paths={btA} />
+      <RouterBoard {...scenario} paths={btB} />
+    </>
+  )
 }
 
 const meta: Meta<typeof RouterBoard> = {

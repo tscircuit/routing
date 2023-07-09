@@ -47,4 +47,4 @@ export type FoundPath<T = Record<string, never>> = Path & {
 
 export type PathFindingResult<T = Record<string, never>> =
   | FoundPath<T>
-  | { pathFound: false }
+  | { pathFound: false; message?: string }
