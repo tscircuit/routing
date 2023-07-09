@@ -2,7 +2,7 @@
   "name": "@tscircuit/routing",
   "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "next dev",
     "build": "tsup ./src/index.ts --dts --outDir ./dist",
