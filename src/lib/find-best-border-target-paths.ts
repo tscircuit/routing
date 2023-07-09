@@ -56,7 +56,7 @@ export const findBestBorderTargetPaths = ({
         x: point.x + xs * distanceToBorder + xd * d,
         y: point.y + ys * distanceToBorder + yd * d,
       })
-      if (isInObstacle({ point: bp, obstacles })) {
+      if (isInObstacle({ point: bp, obstacles, margin: grid.segmentSize })) {
         continue
       }
       borderPoints.push({
@@ -101,7 +101,7 @@ export const findBestBorderTargetPaths = ({
     )
   })
 
-  // // Order the borderPoints by their distance to the distantTarget
+  // Order the borderPoints by their distance to the distantTarget
   closestBorderPoints.sort((a, b) => a.targetDistance - b.targetDistance)
 
   // First borderPoint with a path to the distantTarget is the best borderPoint
@@ -111,6 +111,12 @@ export const findBestBorderTargetPaths = ({
       pointsToConnect: [point, borderPoint],
       obstacles,
       grid,
+    })
+    console.log({
+      pointsToConnect: [point, borderPoint],
+      obstacles,
+      grid,
+      result,
     })
     if (result.pathFound === true) {
       resultPaths.push({

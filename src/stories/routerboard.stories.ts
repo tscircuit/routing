@@ -23,7 +23,7 @@ export const Primary: Story = {
       { x: 40, y: 10 },
       { x: 50, y: 10 },
     ],
-    grid: { segmentSize: 10, marginSegments: 1 },
+    grid: { segmentSize: 10, marginSegments: 1, maxGranularSearchSegments: 50 },
     obstacles: [
       {
         center: { x: 60, y: 60 },

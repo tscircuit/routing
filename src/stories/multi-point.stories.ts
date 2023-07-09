@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import { RouterBoard } from "../components/RouterBoard"
 import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
-import { Path, PathFindingResult } from "../lib/types"
+import { Grid, Path, PathFindingResult } from "../lib/types"
 import { findRoute } from "../lib/find-route"
 
 const meta: Meta<typeof RouterBoard> = {
@@ -43,7 +43,11 @@ const scenario = {
       height: 55,
     },
   ],
-  grid: { segmentSize: 10, marginSegments: 3 },
+  grid: {
+    segmentSize: 10,
+    marginSegments: 3,
+    maxGranularSearchSegments: 5,
+  } as Grid,
 }
 
 const throwIfNotFound = (path: PathFindingResult): Path => {

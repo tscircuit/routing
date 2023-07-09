@@ -1,5 +1,10 @@
+import { findBestBorderTargetPaths } from "./find-best-border-target-paths"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
-import type { PathFindingParameters, PathFindingResult } from "./types"
+import type {
+  FoundPath,
+  PathFindingParameters,
+  PathFindingResult,
+} from "./types"
 
 /**
  * Finds a route between two points, avoiding obstacles and using an approximate

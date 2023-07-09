@@ -25,6 +25,13 @@ export type Grid = {
    * set to 1 or 2
    */
   marginSegments: number
+
+  /**
+   * Maximum segments allowed in a square search. Typically 100. The square of
+   * this is the size of the search matrix. Increase this will yield better
+   * paths, but will decrease performance.
+   */
+  maxGranularSearchSegments: number
 }
 
 export type PathFindingParameters = {
@@ -33,7 +40,10 @@ export type PathFindingParameters = {
   grid: Grid
 }
 
-export type FoundPath<T> = Path & { length: number; pathFound: true } & T
+export type FoundPath<T = Record<string, never>> = Path & {
+  length: number
+  pathFound: true
+} & T
 
 export type PathFindingResult<T = Record<string, never>> =
   | FoundPath<T>
