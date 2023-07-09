@@ -13,6 +13,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@semantic-release/commit-analyzer": "^10.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^10.0.4",
+    "@semantic-release/release-notes-generator": "^11.0.4",
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.0.26",
     "@storybook/addon-links": "^7.0.26",
@@ -26,6 +30,7 @@
     "next": "^13.4.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "semantic-release": "^21.0.7",
     "storybook": "^7.0.26",
     "tsup": "^7.1.0",
     "typescript": "5.1.6"
