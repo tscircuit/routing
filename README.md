@@ -1,5 +1,9 @@
 # @tscircuit/routing
 
+[![npm version](https://badge.fury.io/js/@tscircuit%2Frouting.svg)](https://badge.fury.io/js/@tscircuit%2Frouting)
+
+[Examples](https://routing-tsc.vercel.app/) &middot; [TSCircuit](https://tscircuit.com)
+
 This library has deterministic routing algorithms for PCB autorouting inside
 of [tscircuit](https://tscircuit.com)
 
