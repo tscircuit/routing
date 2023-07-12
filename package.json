@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "next dev",
+    "start": "storybook dev -p 6006",
     "build": "tsup ./src/index.ts --dts --outDir ./dist",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
