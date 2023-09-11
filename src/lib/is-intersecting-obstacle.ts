@@ -1,23 +1,28 @@
 import type { Obstacle, Point } from "./types"
 
+type Parameters =
+  | {
+      x1: number
+      x2: number
+      y1: number
+      y2: number
+      obstacles: Obstacle[]
+      margin?: number
+    }
+  | {
+      points: Point[]
+      obstacles: Obstacle[]
+      margin?: number
+    }
+
 /**
  * Determine if a line is intersecting an obstacle
  */
-export const isIntersectingObstacle = ({
-  x1,
-  x2,
-  y1,
-  y2,
-  obstacles,
-  margin = 0,
-}: {
-  x1: number
-  x2: number
-  y1: number
-  y2: number
-  obstacles: Obstacle[]
-  margin?: number
-}): boolean => {
+export const isIntersectingObstacle = (params: Parameters): boolean => {
+  const { obstacles, margin = 0 } = params
+
+  let { x1, x2, y1, y2, points } = params as any
+
   const clipLine = (
     x1: number,
     y1: number,
@@ -47,6 +52,28 @@ export const isIntersectingObstacle = ({
     }
 
     return u1 <= u2
+  }
+
+  if (points.length > 2) {
+    return (
+      isIntersectingObstacle({
+        points: points.slice(0, 2),
+        obstacles,
+        margin,
+      }) &&
+      isIntersectingObstacle({
+        points: points.slice(1),
+        obstacles,
+        margin,
+      })
+    )
+  }
+
+  if (points) {
+    x1 = points[0].x
+    x2 = points[1].x
+    y1 = points[0].y
+    y2 = points[1].y
   }
 
   for (const obstacle of obstacles) {

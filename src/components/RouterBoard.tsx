@@ -70,7 +70,7 @@ export const RouterBoard = ({
         {paths.map((path, index) => (
           <polyline
             points={path.points.map((p) => `${p.x},${p.y}`).join(" ")}
-            stroke="green"
+            stroke={(path as any).color ?? "green"}
             strokeWidth={path.width}
             fill="none"
             key={index}

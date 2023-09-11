@@ -5,6 +5,7 @@ import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
 import { Grid, Path, PathFindingResult } from "../lib/types"
 import { findTwoPointMixedGranularityRoute } from "../lib/find-two-point-mixed-granularity-route"
 import { findTwoPointSchematicRoute } from "../lib/find-two-point-schematic-route"
+import { findTwoPointNearBiasRoute } from "../lib"
 
 const meta: Meta<typeof RouterBoard> = {
   title: "Routing/SchematicStyleRoute",
@@ -28,22 +29,22 @@ export const Primary = () => {
   const scenario = {
     points: [
       { x: 10, y: 10 },
-      { x: 80, y: 80 },
+      { x: 130, y: 80 },
     ],
     obstacles: [
       {
-        center: { x: 80, y: 60 },
+        center: { x: 100, y: 60 },
         width: 35,
         height: 10,
       },
       {
-        center: { x: 70, y: 70 },
+        center: { x: 90, y: 70 },
         width: 15,
         height: 15,
       },
     ],
     grid: {
-      segmentSize: 10,
+      segmentSize: 5,
       marginSegments: 1,
       maxGranularSearchSegments: 50,
     } as Grid,
@@ -60,6 +61,16 @@ export const Primary = () => {
               allowDiagonal: false,
             })
           ),
+          {
+            ...throwIfNotFound(
+              findTwoPointNearBiasRoute({
+                ...scenario,
+                pointsToConnect: scenario.points,
+                allowDiagonal: false,
+              })
+            ),
+            color: "rgba(0, 0, 255, 0.2)",
+          } as any,
         ],
         viewBox: {
           topLeftX: 0,

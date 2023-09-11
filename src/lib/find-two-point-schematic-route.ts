@@ -1,5 +1,74 @@
 import { findTwoPointNearBiasRoute } from "./find-two-point-near-bias-route"
-import { PathFindingParameters } from "./types"
+import { isIntersectingObstacle } from "./is-intersecting-obstacle"
+import { removeUnnecessaryPoints } from "./remove-unnecessary-points"
+import {
+  Obstacle,
+  PathFindingParameters,
+  PathFindingResult,
+  Point,
+} from "./types"
+
+const removeUnnecessaryTurns = ({
+  points,
+  obstacles,
+}: {
+  points: Point[]
+  obstacles: Obstacle[]
+}): Point[] => {
+  if (points.length <= 3) return points
+
+  const newPoints = [points[0], points[1]]
+
+  // Walk the route, if there's an unnecessary turn, check that the route
+  // doesn't hit an obstacle and move on
+  for (let i = 1; i < points.length - 3; i++) {
+    const P = newPoints[i - 1]
+
+    const A = newPoints[i]
+    const B = points[i + 1]
+    const C = points[i + 2]
+
+    // Are P -> A -> B all on the same line (the turn was changed?)
+
+    if (P.x === A.x && A.x === B.x) {
+      newPoints.push(B)
+      continue
+    }
+    if (P.y === A.y && A.y === B.y) {
+      newPoints.push(B)
+      continue
+    }
+
+    const B_opt =
+      A.x === B.x
+        ? { x: C.x, y: A.y }
+        : {
+            x: A.x,
+            y: C.y,
+          }
+
+    // The path to B_opt is more optimal because it has one less turn, but does
+    // it hit any obstacles?
+
+    const newPathPossible =
+      !isIntersectingObstacle({
+        obstacles,
+        points: [A, B_opt],
+      }) &&
+      !isIntersectingObstacle({
+        obstacles,
+        points: [B_opt, C],
+      })
+
+    if (newPathPossible) {
+      newPoints.push(B_opt)
+    } else {
+      newPoints.push(B)
+    }
+  }
+  newPoints.push(...points.slice(-2))
+  return newPoints
+}
 
 /**
  * Find a the optimal route between two points with as few unnecessary turns
@@ -16,7 +85,7 @@ export const findTwoPointSchematicRoute = ({
   grid,
   obstacles,
   pointsToConnect,
-}: PathFindingParameters) => {
+}: PathFindingParameters): PathFindingResult => {
   // TODO Omit grid- shouldn't be needed for schematic routes
   const route = findTwoPointNearBiasRoute({
     grid,
@@ -27,39 +96,20 @@ export const findTwoPointSchematicRoute = ({
 
   if (!route.pathFound) return { pathFound: false }
 
-  const newPoints = [route.points[0]]
+  let currentBest = route.points
+  while (true) {
+    let newPoints = removeUnnecessaryTurns({ points: currentBest, obstacles })
+    newPoints = removeUnnecessaryPoints(newPoints)
 
-  // Walk the route, if there's an unnecessary turn, check that the route
-  // doesn't hit an obstacle and move on
-  for (let i = 0; i < route.points.length - 3; i++) {
-    const A = route.points[i]
-    const B = route.points[i + 1]
-    const C = route.points[i + 2]
-
-    // If A and C are on the same axis, we can remove B
-    if (A.x === C.x || A.y === C.y) {
-      // Check that the route doesn't hit an obstacle
-      // TODO Since it's a straight-line path, it should be faster to compute
-      // without doing pathfinding
-      if (
-        !findTwoPointNearBiasRoute({
-          grid,
-          obstacles,
-          pointsToConnect: [A, C],
-          allowDiagonal: false,
-        }).pathFound
-      ) {
-        newPoints.push(C)
-        i++
-      }
+    if (newPoints.length === currentBest.length) {
+      break
     } else {
-      newPoints.push(B)
+      currentBest = newPoints
     }
   }
-  newPoints.push(...route.points.slice(-2))
 
   return {
     ...route,
-    points: newPoints,
+    points: currentBest,
   }
 }
