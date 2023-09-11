@@ -129,18 +129,12 @@ export const findBestBorderTargetPaths = ({
   closestBorderPoints.sort((a, b) => a.targetDistance - b.targetDistance)
 
   // First borderPoint with a path to the distantTarget is the best borderPoint
-  const resultPaths: Array<FoundPath<{ borderTarget: Point }>> = []
+  const resultPaths: Array<FoundPath & { borderTarget: Point }> = []
   for (const borderPoint of closestBorderPoints) {
     const result = findTwoPointGranularRoute({
       pointsToConnect: [point, borderPoint],
       obstacles,
       grid,
-    })
-    console.log({
-      pointsToConnect: [point, borderPoint],
-      obstacles,
-      grid,
-      result,
     })
     if (result.pathFound === true) {
       resultPaths.push({

@@ -84,6 +84,5 @@ export const findTwoPointNearBiasRoute = ({
   if (routes.length === 0) return { pathFound: false }
 
   // Return shortest route
-  console.log({ routes })
   return routes.reduce((a, b) => (a.length < b.length ? a : b))
 }
