@@ -14,6 +14,7 @@ export const findTwoPointMixedGranularityRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  allowDiagonal,
 }: PathFindingParameters): PathFindingResult => {
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
@@ -37,12 +38,14 @@ export const findTwoPointMixedGranularityRoute = ({
         pointsToConnect: [start, startMiddle],
         obstacles,
         grid,
+        allowDiagonal,
       })
       const middleEnd = result.points[result.points.length - 2]
       const endPath = findTwoPointGranularRoute({
         pointsToConnect: [middleEnd, end],
         obstacles,
         grid,
+        allowDiagonal,
       })
       if (startPath.pathFound && endPath.pathFound) {
         return {

@@ -38,6 +38,7 @@ export type PathFindingParameters = {
   pointsToConnect: Point[]
   obstacles: Obstacle[]
   grid: Grid
+  allowDiagonal?: boolean
 }
 
 export type FoundPath = Path & {

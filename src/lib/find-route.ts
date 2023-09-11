@@ -7,6 +7,7 @@ type Parameters = {
   pointsToConnect: Point[]
   obstacles: Obstacle[]
   grid: Grid
+  allowDiagonal?: boolean
 }
 
 /**
@@ -20,6 +21,7 @@ export const findRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  allowDiagonal,
 }: Parameters): PathFindingResult => {
   // Sort the points to connect in ascending order of their distances
   pointsToConnect.sort((a, b) => {
@@ -42,6 +44,7 @@ export const findRoute = ({
       pointsToConnect: [pointA, pointB],
       obstacles,
       grid,
+      allowDiagonal,
     })
 
     if ("pathFound" in pathResult && pathResult.pathFound) {

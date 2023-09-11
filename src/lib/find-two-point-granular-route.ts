@@ -12,6 +12,7 @@ export const findTwoPointGranularRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  allowDiagonal,
 }: PathFindingParameters): PathFindingResult => {
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
@@ -77,7 +78,10 @@ export const findTwoPointGranularRoute = ({
   })
 
   const finder = new PF.AStarFinder({
-    diagonalMovement: PF.DiagonalMovement.OnlyWhenNoObstacles,
+    diagonalMovement:
+      allowDiagonal ?? true
+        ? PF.DiagonalMovement.OnlyWhenNoObstacles
+        : PF.DiagonalMovement.Never,
   })
   const path = finder.findPath(
     startNode.x,

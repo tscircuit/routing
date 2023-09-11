@@ -14,6 +14,7 @@ export const findTwoPointNearBiasRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  allowDiagonal,
   depth,
 }: PathFindingParameters & { depth?: number }): PathFindingResult => {
   if (pointsToConnect.length !== 2)
@@ -29,6 +30,7 @@ export const findTwoPointNearBiasRoute = ({
       pointsToConnect,
       obstacles,
       grid,
+      allowDiagonal,
     })
   }
 
@@ -45,6 +47,7 @@ export const findTwoPointNearBiasRoute = ({
     grid,
     distanceToBorder,
     distantTarget: B,
+    allowDiagonal,
   })
 
   const BBP = findBestBorderTargetPaths({
@@ -53,6 +56,7 @@ export const findTwoPointNearBiasRoute = ({
     grid,
     distanceToBorder,
     distantTarget: A,
+    allowDiagonal,
   })
 
   // Go through every combination of A border points and B border points, and
@@ -65,6 +69,7 @@ export const findTwoPointNearBiasRoute = ({
         obstacles,
         grid,
         depth: depth + 1,
+        allowDiagonal,
       })
       if (middleRoute.pathFound === false) continue
       const fullRoute = {

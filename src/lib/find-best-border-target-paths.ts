@@ -33,12 +33,14 @@ export const findBestBorderTargetPaths = ({
   grid,
   distantTarget,
   distanceToBorder,
+  allowDiagonal,
 }: {
   grid: Grid
   obstacles: Obstacle[]
   point: Point
   distantTarget: Point
   distanceToBorder: number
+  allowDiagonal?: boolean
 }): Array<FoundPath & { borderTarget: Point }> => {
   const { roundToNearestGridPoint } = computeGridTransform({ grid })
 
@@ -135,6 +137,7 @@ export const findBestBorderTargetPaths = ({
       pointsToConnect: [point, borderPoint],
       obstacles,
       grid,
+      allowDiagonal,
     })
     if (result.pathFound === true) {
       resultPaths.push({

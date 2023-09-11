@@ -14,6 +14,12 @@ export const findTwoPointRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  allowDiagonal,
 }: PathFindingParameters): PathFindingResult => {
-  return findTwoPointGranularRoute({ pointsToConnect, obstacles, grid })
+  return findTwoPointGranularRoute({
+    pointsToConnect,
+    obstacles,
+    grid,
+    allowDiagonal,
+  })
 }
