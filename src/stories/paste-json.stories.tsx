@@ -36,6 +36,12 @@ export const PasteJson = () => {
     JSON.stringify(defaultJson, null, "  ")
   )
   const [algo, setAlgo] = useState("none")
+  const [viewBox, setViewBox] = useState({
+    x: 0,
+    y: 0,
+    w: (8 / 5) * 100,
+    h: 100,
+  })
 
   const Board = () => {
     let paths = []
@@ -62,10 +68,10 @@ export const PasteJson = () => {
         {...scenario}
         paths={paths}
         viewBox={{
-          topLeftX: 0,
-          topLeftY: 0,
-          width: (8 / 5) * 100,
-          height: 100,
+          topLeftX: viewBox.x,
+          topLeftY: viewBox.y,
+          width: viewBox.w,
+          height: viewBox.h,
         }}
         height={500}
         width={800}
@@ -105,6 +111,22 @@ export const PasteJson = () => {
             route
           </div>
           <br />
+          <br />
+          <div>
+            viewbox (x,y,w,h):{" "}
+            <input
+              type="text"
+              defaultValue="0,0,800,500"
+              onChange={(e) => {
+                try {
+                  const [x, y, w, h] = e.target.value.split(",").map(parseFloat)
+                  if ([x, y, w, h].some(isNaN))
+                    throw new Error("invalid viewbox")
+                  setViewBox({ x, y, w, h })
+                } catch (e) {}
+              }}
+            />
+          </div>
         </div>
       </div>
       <div>
