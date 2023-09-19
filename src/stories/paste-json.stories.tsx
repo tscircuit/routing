@@ -37,8 +37,8 @@ export const PasteJson = () => {
   )
   const [algo, setAlgo] = useState("none")
   const [viewBox, setViewBox] = useState({
-    x: 0,
-    y: 0,
+    x: -30,
+    y: -80,
     w: (8 / 5) * 100,
     h: 100,
   })
@@ -116,7 +116,9 @@ export const PasteJson = () => {
             viewbox (x,y,w,h):{" "}
             <input
               type="text"
-              defaultValue="0,0,800,500"
+              defaultValue={[viewBox.x, viewBox.y, viewBox.w, viewBox.h].join(
+                ","
+              )}
               onChange={(e) => {
                 try {
                   const [x, y, w, h] = e.target.value.split(",").map(parseFloat)

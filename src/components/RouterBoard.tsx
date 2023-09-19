@@ -35,10 +35,10 @@ export const RouterBoard = ({
           length: Math.ceil(width / grid.segmentSize) + 1,
         }).map((_, x) => (
           <line
-            x1={x * grid.segmentSize}
-            y1={0}
-            x2={x * grid.segmentSize}
-            y2={viewBox.height}
+            x1={viewBox.topLeftX + x * grid.segmentSize}
+            y1={viewBox.topLeftY}
+            x2={viewBox.topLeftX + x * grid.segmentSize}
+            y2={viewBox.topLeftY + viewBox.height}
             stroke="lightgray"
           />
         ))}
@@ -46,10 +46,10 @@ export const RouterBoard = ({
           length: Math.ceil(height / grid.segmentSize) + 1,
         }).map((_, y) => (
           <line
-            x1={0}
-            y1={y * grid.segmentSize}
-            x2={viewBox.width}
-            y2={y * grid.segmentSize}
+            x1={viewBox.topLeftX}
+            y1={viewBox.topLeftY + y * grid.segmentSize}
+            x2={viewBox.topLeftX + viewBox.width}
+            y2={viewBox.topLeftY + y * grid.segmentSize}
             stroke="lightgray"
           />
         ))}
