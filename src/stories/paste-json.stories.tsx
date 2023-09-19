@@ -49,8 +49,6 @@ export const PasteJson = () => {
         inputJson.pointsToConnect ?? inputJson.points ?? defaultJson.points,
     }
 
-    console.log(scenario)
-
     if (algo === "find_schematic_route") {
       const route = findSchematicRoute(scenario)
       if (route.pathFound) paths = [route]
