@@ -26,6 +26,9 @@ export const RouterBoard = ({
     viewBox.height,
   ].join(" ")
 
+  // scale factor, 1 = 1% of width
+  const SF = viewBox.width / 100
+
   return (
     <div>
       {" "}
@@ -40,6 +43,7 @@ export const RouterBoard = ({
             x2={viewBox.topLeftX + x * grid.segmentSize}
             y2={viewBox.topLeftY + viewBox.height}
             stroke="lightgray"
+            strokeWidth={SF}
           />
         ))}
         {Array.from({
@@ -51,6 +55,7 @@ export const RouterBoard = ({
             x2={viewBox.topLeftX + viewBox.width}
             y2={viewBox.topLeftY + y * grid.segmentSize}
             stroke="lightgray"
+            strokeWidth={SF}
           />
         ))}
 
@@ -71,7 +76,7 @@ export const RouterBoard = ({
           <polyline
             points={path.points.map((p) => `${p.x},${p.y}`).join(" ")}
             stroke={(path as any).color ?? "green"}
-            strokeWidth={path.width}
+            strokeWidth={path.width * SF}
             fill="none"
             key={index}
           />
@@ -79,7 +84,13 @@ export const RouterBoard = ({
 
         {/* Render points */}
         {points.map((point, index) => (
-          <circle cx={point.x} cy={point.y} r={1.5} fill="blue" key={index} />
+          <circle
+            cx={point.x}
+            cy={point.y}
+            r={SF * 1.5}
+            fill="blue"
+            key={index}
+          />
         ))}
       </svg>
     </div>
