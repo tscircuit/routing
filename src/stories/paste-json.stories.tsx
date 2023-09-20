@@ -4,75 +4,30 @@ import { RouterBoard } from "../components/RouterBoard"
 import { ErrorBoundary } from "react-error-boundary"
 import { findRoute, findSchematicRoute } from "../lib"
 
-// const defaultJson = {
-//   points: [
-//     { x: 10, y: 10 },
-//     { x: 130, y: 80 },
-//   ],
-//   obstacles: [
-//     {
-//       center: { x: 100, y: 60 },
-//       width: 35,
-//       height: 10,
-//     },
-//     {
-//       center: { x: 90, y: 70 },
-//       width: 15,
-//       height: 15,
-//     },
-//   ],
-//   grid: {
-//     segmentSize: 5,
-//     marginSegments: 1,
-//     maxGranularSearchSegments: 50,
-//   },
-// }
 const defaultJson = {
   points: [
-    {
-      x: 0.5,
-      y: 0,
-      schematic_port_id: "schematic_port_3",
-      facing_direction: "right",
-    },
-    {
-      x: -1.5,
-      y: 2,
-      schematic_port_id: "schematic_port_0",
-    },
+    { x: 10, y: 10 },
+    { x: 130, y: 80 },
   ],
   obstacles: [
     {
-      center: {
-        x: -2,
-        y: 2,
-      },
-      width: 1,
-      height: 0,
+      center: { x: 100, y: 60 },
+      width: 35,
+      height: 10,
     },
     {
-      center: {
-        x: 0,
-        y: 0,
-      },
-      width: 1,
-      height: 0.3,
-    },
-    {
-      center: {
-        x: -0.5,
-        y: 1,
-      },
-      width: 1,
-      height: 0.3,
+      center: { x: 90, y: 70 },
+      width: 15,
+      height: 15,
     },
   ],
   grid: {
-    marginSegments: 2,
+    segmentSize: 5,
+    marginSegments: 1,
     maxGranularSearchSegments: 50,
-    segmentSize: 0.1,
   },
 }
+
 const FallbackError = ({ error }) => {
   return <div style={{ color: "red" }}>{error.message}</div>
 }
@@ -83,14 +38,10 @@ export const PasteJson = () => {
   )
   const [algo, setAlgo] = useState("none")
   const [viewBox, setViewBox] = useState({
-    // x: 0,
-    // y: 0,
-    // w: (8 / 5) * 100,
-    // h: 100,
-    x: -3,
-    y: -1,
-    w: (8 / 5) * 4,
-    h: 4,
+    x: 0,
+    y: 0,
+    w: (8 / 5) * 100,
+    h: 100,
   })
 
   const Board = () => {
