@@ -83,10 +83,14 @@ export const PasteJson = () => {
   )
   const [algo, setAlgo] = useState("none")
   const [viewBox, setViewBox] = useState({
-    x: 0,
-    y: 0,
-    w: (8 / 5) * 100,
-    h: 100,
+    // x: 0,
+    // y: 0,
+    // w: (8 / 5) * 100,
+    // h: 100,
+    x: -3,
+    y: -1,
+    w: (8 / 5) * 4,
+    h: 4,
   })
 
   const Board = () => {

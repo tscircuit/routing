@@ -12,7 +12,7 @@ type Parameters = {
 /**
  * Find a schematic route between all the points.
  *
- * Internally, uses findTwoPointRoute. If two points are more than 2x distant
+ * Internally, uses findTwoPointSchematicRoute. If two points are more than 2x distant
  * that the nearest point, then there is no need to compute a route between
  * them.
  */
