@@ -115,7 +115,7 @@ export const findTwoPointSchematicRoute = ({
     let newPoints = removeUnnecessaryTurns({
       points: currentBest,
       obstacles,
-      log: tr_log.child(`Remove Unnecessary Turns Iteration ${iters}`),
+      // log: tr_log.child(`Remove Unnecessary Turns Iteration ${iters}`),
     })
     newPoints = removeUnnecessaryPoints(newPoints)
 

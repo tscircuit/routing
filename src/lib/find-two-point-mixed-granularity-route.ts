@@ -9,7 +9,8 @@ import type {
   FoundPath,
 } from "./types"
 
-const MULTIPLES = [16, 8, 4, 3, 2, 1]
+// const MULTIPLES = [20, 10, 5, 2, 1]
+const MULTIPLES = [1, 2, 5, 10, 20]
 
 export const findTwoPointMixedGranularityRoute = ({
   pointsToConnect,
@@ -29,13 +30,14 @@ export const findTwoPointMixedGranularityRoute = ({
     // HACK: when the grid step is big, it can lead to "overshooting" the points
     if (grid.segmentSize * multiple > maxDist / 4) continue
 
+    // We should never exceed the maxGranularSearchSegments
+    const remainingSegDist =
+      Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) /
+      (grid.segmentSize * multiple)
+
+    if (remainingSegDist > grid.maxGranularSearchSegments) continue
+
     const { transformedGrid } = computeGridTransform({ grid, multiple })
-    console.log({ transformedGrid, multiple, grid })
-    console.log({
-      pointsToConnect: [start, end],
-      obstacles,
-      grid: transformedGrid,
-    })
     const result = findTwoPointGranularRoute({
       pointsToConnect: [start, end],
       obstacles,
@@ -82,5 +84,8 @@ export const findTwoPointMixedGranularityRoute = ({
       return result
     }
   }
-  throw new Error("unreachable")
+
+  log.info.not_found = true
+  log.end()
+  return { pathFound: false }
 }

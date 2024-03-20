@@ -32,7 +32,8 @@ export const RouterBoard = ({
     viewBox.height,
   ].join(" ")
 
-  points = points ?? pointsToConnect
+  points ??= pointsToConnect
+  pointsToConnect ??= points
 
   // scale factor, 1 = 1% of width
   const SF = viewBox.width / 100

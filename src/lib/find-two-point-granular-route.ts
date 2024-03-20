@@ -86,11 +86,6 @@ export const findTwoPointGranularRoute = ({
         ? PF.DiagonalMovement.OnlyWhenNoObstacles
         : PF.DiagonalMovement.Never,
   })
-  console.log({
-    startNode,
-    endNode,
-    gridMatrix,
-  })
   const path = finder.findPath(
     startNode.x,
     startNode.y,
@@ -98,7 +93,6 @@ export const findTwoPointGranularRoute = ({
     endNode.y,
     gridMatrix
   )
-  console.log("fin")
 
   // If a path can't be found, return an empty path
   if (path.length === 0) {
