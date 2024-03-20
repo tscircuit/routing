@@ -75,17 +75,21 @@ export const findTwoPointNearBiasRoute = ({
   // select the best path
   const routes: FoundPath[] = []
   const bp_log = log.child(
-    `Border Target Matrix Search ${ABP.length + BBP.length}`
+    `Border Target Matrix Search ${ABP.length * BBP.length}`
   )
-  for (const abp of ABP) {
-    for (const bbp of BBP) {
+  for (let abpi = 0; abpi < ABP.length; abpi++) {
+    const abp = ABP[abpi]
+    for (let bbpi = 0; bbpi < BBP.length; bbpi++) {
+      const bbp = BBP[bbpi]
       const middleRoute = findTwoPointNearBiasRoute({
         pointsToConnect: [abp.borderTarget, bbp.borderTarget],
         obstacles,
         grid,
         depth: depth + 1,
         allowDiagonal,
-        log: bp_log.child(`Middle Route`),
+        log: bp_log.child(
+          `Middle Route ${abpi + 1}x${bbpi + 1}/${ABP.length}x${BBP.length}`
+        ),
       })
       if (middleRoute.pathFound === false) continue
       const fullRoute = {
