@@ -1,12 +1,14 @@
 import * as PF from "pathfinding"
 import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
 import { findTwoPointSchematicRoute } from "./find-two-point-schematic-route"
+import { RouteContext, createRouteContext } from "./route-context"
 
 type Parameters = {
   pointsToConnect: Point[]
   obstacles: Obstacle[]
   grid: Grid
   allowDiagonal?: boolean
+  ctx?: RouteContext
 }
 
 /**
@@ -20,7 +22,9 @@ export const findSchematicRoute = ({
   pointsToConnect,
   obstacles,
   grid,
+  ctx,
 }: Parameters): PathFindingResult => {
+  ctx ??= createRouteContext()
   // Sort the points to connect in ascending order of their distances
   pointsToConnect.sort((a, b) => {
     const distA = Math.sqrt(a.x ** 2 + a.y ** 2)
