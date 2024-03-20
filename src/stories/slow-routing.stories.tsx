@@ -2,8 +2,7 @@ const scenario = {
   pointsToConnect: [
     { x: 3, y: -1.75, schematic_port_id: "schematic_port_34" },
     { x: 4.5, y: -1.75, schematic_port_id: "schematic_port_35" },
-    // { x: -8, y: -7.75, schematic_port_id: "schematic_port_36" },
-    // { x: 1, y: -4.75, schematic_port_id: "schematic_port_36" }, // TEST
+    { x: -8, y: -7.75, schematic_port_id: "schematic_port_36" },
     {
       x: 4.5,
       y: -0.5,

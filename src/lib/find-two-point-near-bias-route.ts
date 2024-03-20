@@ -1,5 +1,6 @@
 import { findBestBorderTargetPaths } from "./find-best-border-target-paths"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
+import { findTwoPointMixedGranularityRoute } from "./find-two-point-mixed-granularity-route"
 import { createLogContextTree } from "./logging/log-context"
 import type {
   FoundPath,
@@ -38,6 +39,22 @@ export const findTwoPointNearBiasRoute = ({
     })
     log.end()
     return granRoute
+  }
+
+  // Attempt to find route w/ higher granualarity if it's a middle route (where
+  // precision isn't as important, since it doesn't connect to the end point)
+  if (depth > 0) {
+    const mixedGranRoute = findTwoPointMixedGranularityRoute({
+      pointsToConnect,
+      obstacles,
+      grid,
+      allowDiagonal,
+      log: log.child(`2P Mixed Granularity Route`),
+    })
+    if (mixedGranRoute.pathFound) {
+      log.end()
+      return mixedGranRoute
+    }
   }
 
   if (depth > 3) {
