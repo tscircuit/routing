@@ -1,14 +1,15 @@
 const scenario = {
   pointsToConnect: [
-    // { x: 3, y: -1.75, schematic_port_id: "schematic_port_34" },
+    { x: 3, y: -1.75, schematic_port_id: "schematic_port_34" },
     { x: 4.5, y: -1.75, schematic_port_id: "schematic_port_35" },
-    { x: -8, y: -7.75, schematic_port_id: "schematic_port_36" },
-    // {
-    //   x: 4.5,
-    //   y: -0.5,
-    //   schematic_port_id: "schematic_port_28",
-    //   facing_direction: "up",
-    // },
+    // { x: -8, y: -7.75, schematic_port_id: "schematic_port_36" },
+    // { x: 1, y: -4.75, schematic_port_id: "schematic_port_36" }, // TEST
+    {
+      x: 4.5,
+      y: -0.5,
+      schematic_port_id: "schematic_port_28",
+      facing_direction: "up",
+    },
   ],
   obstacles: [
     { center: { x: 0, y: 0 }, width: 1, height: 6.5 },
@@ -53,7 +54,11 @@ const scenario = {
     { center: { x: 4.5, y: -1.875 }, width: 0.8000000000000007, height: 0.25 },
     { center: { x: -8, y: -7.875 }, width: 0.8000000000000007, height: 0.25 },
   ],
-  grid: { maxGranularSearchSegments: 50, marginSegments: 10, segmentSize: 0.1 },
+  grid: {
+    maxGranularSearchSegments: 10,
+    marginSegments: 10,
+    segmentSize: 0.1,
+  },
 }
 
 import type { Meta, StoryObj } from "@storybook/react"
@@ -68,6 +73,7 @@ import {
   findTwoPointNearBiasRoute,
   movePointsOutsideObstacles,
 } from "../lib"
+import { createLogContextTree } from "../lib/logging/log-context"
 
 const meta: Meta<typeof RouterBoard> = {
   title: "Routing/SlowRouting1",
@@ -93,6 +99,7 @@ const throwIfNotFound = (path: PathFindingResult): Path => {
 
 export const TestSchematicRoute1 = () => {
   const scenario2 = movePointsOutsideObstacles(scenario)
+  const log = createLogContextTree({ loudEnd: true })
   return (
     <RouterBoard
       {...{
@@ -101,6 +108,7 @@ export const TestSchematicRoute1 = () => {
           throwIfNotFound(
             findSchematicRoute({
               ...scenario2,
+              log,
               allowDiagonal: false,
             })
           ),

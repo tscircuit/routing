@@ -1,14 +1,14 @@
 import * as PF from "pathfinding"
 import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
 import { findTwoPointSchematicRoute } from "./find-two-point-schematic-route"
-import { RouteContext, createRouteContext } from "./route-context"
+import { LogContextTree, createLogContextTree } from "./logging/log-context"
 
 type Parameters = {
   pointsToConnect: Point[]
   obstacles: Obstacle[]
   grid: Grid
   allowDiagonal?: boolean
-  ctx?: RouteContext
+  log?: LogContextTree
 }
 
 /**
@@ -22,9 +22,10 @@ export const findSchematicRoute = ({
   pointsToConnect,
   obstacles,
   grid,
-  ctx,
+  log,
 }: Parameters): PathFindingResult => {
-  ctx ??= createRouteContext()
+  log ??= createLogContextTree()
+
   // Sort the points to connect in ascending order of their distances
   pointsToConnect.sort((a, b) => {
     const distA = Math.sqrt(a.x ** 2 + a.y ** 2)
@@ -37,6 +38,7 @@ export const findSchematicRoute = ({
   let totalLength = 0
 
   // Iterate over each point
+  const ps_log = log.child(`${pointsToConnect.length} A->B Path Search`)
   for (let i = 0; i < pointsToConnect.length - 1; i++) {
     const pointA = pointsToConnect[i]
     const pointB = pointsToConnect[i + 1]
@@ -47,6 +49,7 @@ export const findSchematicRoute = ({
       obstacles,
       grid,
       allowDiagonal: false,
+      log: ps_log,
     })
 
     if ("pathFound" in pathResult && pathResult.pathFound) {
@@ -57,6 +60,8 @@ export const findSchematicRoute = ({
       return { pathFound: false }
     }
   }
+  ps_log.end()
+  log.end()
 
   return pathFound
     ? { points, length: totalLength, width: 1, pathFound: true }

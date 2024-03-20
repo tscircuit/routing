@@ -11,10 +11,26 @@ export interface LogContextTree {
   end: () => void
 }
 
-export const createLogContextTree = (): LogContextTree => {
+export const getStringifiedTreeLines = (tree: LogContextTree) => {
+  return [
+    `${`${tree?.duration?.toString() ?? "???"}ms`.padEnd(6, " ")} ${
+      tree.name
+    }  ${tree.info ? JSON.stringify(tree.info) : ""}`,
+    ...tree.children
+      .map((child) => getStringifiedTreeLines(child))
+      .flat()
+      .map((line) => `       ${line}`),
+  ]
+}
+
+export const createLogContextTree = ({
+  loudEnd,
+}: { loudEnd?: boolean } = {}): LogContextTree => {
   const tree: Partial<LogContextTree> = {
     name: "root",
     start_time: Date.now(),
+    info: {},
+    children: [],
   }
 
   tree.start = (info) => {
@@ -23,6 +39,9 @@ export const createLogContextTree = (): LogContextTree => {
   tree.end = () => {
     tree.end_time = Date.now()
     tree.duration = tree.end_time - tree.start_time
+    if (loudEnd && tree.name === "root") {
+      console.log(getStringifiedTreeLines(tree as LogContextTree).join("\n"))
+    }
   }
   tree.child = (name) => {
     const child = createLogContextTree()

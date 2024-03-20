@@ -7,13 +7,16 @@ import type {
   PathFindingResult,
   PathFindingParameters,
 } from "./types"
+import { createLogContextTree } from "./logging/log-context"
 
 export const findTwoPointGranularRoute = ({
   pointsToConnect,
   obstacles,
   grid,
   allowDiagonal,
+  log,
 }: PathFindingParameters): PathFindingResult => {
+  log ??= createLogContextTree()
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
 
@@ -108,6 +111,7 @@ export const findTwoPointGranularRoute = ({
     return acc + Math.sqrt((p.x - prev.x) ** 2 + (p.y - prev.y) ** 2)
   }, 0)
 
+  log.end()
   return {
     pathFound: true,
     points: realPath,
