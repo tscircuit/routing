@@ -1,5 +1,6 @@
 import { findTwoPointNearBiasRoute } from "./find-two-point-near-bias-route"
 import { isIntersectingObstacle } from "./is-intersecting-obstacle"
+import { LogContextTree, createLogContextTree } from "./logging/log-context"
 import { removeUnnecessaryPoints } from "./remove-unnecessary-points"
 import {
   Obstacle,
@@ -11,11 +12,17 @@ import {
 const removeUnnecessaryTurns = ({
   points,
   obstacles,
+  log,
 }: {
   points: Point[]
   obstacles: Obstacle[]
+  log?: LogContextTree
 }): Point[] => {
-  if (points.length <= 3) return points
+  log ??= createLogContextTree()
+  if (points.length <= 3) {
+    log.end()
+    return points
+  }
 
   const newPoints = [points[0], points[1]]
 
@@ -67,6 +74,7 @@ const removeUnnecessaryTurns = ({
     }
   }
   newPoints.push(...points.slice(-2))
+  log.end()
   return newPoints
 }
 
@@ -85,20 +93,30 @@ export const findTwoPointSchematicRoute = ({
   grid,
   obstacles,
   pointsToConnect,
+  log,
 }: PathFindingParameters): PathFindingResult => {
+  log ??= createLogContextTree()
   // TODO Omit grid- shouldn't be needed for schematic routes
   const route = findTwoPointNearBiasRoute({
     grid,
     obstacles,
     pointsToConnect,
     allowDiagonal: false,
+    log,
   })
 
   if (!route.pathFound) return { pathFound: false }
 
   let currentBest = route.points
+  const tr_log = log.child("Remove Unnecessary Turns")
+  let iters = 0
   while (true) {
-    let newPoints = removeUnnecessaryTurns({ points: currentBest, obstacles })
+    iters++
+    let newPoints = removeUnnecessaryTurns({
+      points: currentBest,
+      obstacles,
+      // log: tr_log.child(`Remove Unnecessary Turns Iteration ${iters}`),
+    })
     newPoints = removeUnnecessaryPoints(newPoints)
 
     if (newPoints.length === currentBest.length) {
@@ -107,6 +125,7 @@ export const findTwoPointSchematicRoute = ({
       currentBest = newPoints
     }
   }
+  tr_log.end()
 
   return {
     ...route,

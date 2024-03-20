@@ -1,6 +1,7 @@
 import { computeGridTransform } from "./compute-grid-transform"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
 import { getPointDistance } from "./get-point-distance"
+import { createLogContextTree } from "./logging/log-context"
 import type {
   Point,
   PathFindingResult,
@@ -8,14 +9,17 @@ import type {
   FoundPath,
 } from "./types"
 
-const MULTIPLES = [16, 8, 4, 3, 2, 1]
+// const MULTIPLES = [20, 10, 5, 2, 1]
+const MULTIPLES = [1, 2, 5, 10, 20]
 
 export const findTwoPointMixedGranularityRoute = ({
   pointsToConnect,
   obstacles,
   grid,
   allowDiagonal,
+  log,
 }: PathFindingParameters): PathFindingResult => {
+  log ??= createLogContextTree()
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
 
@@ -25,6 +29,13 @@ export const findTwoPointMixedGranularityRoute = ({
   for (const multiple of MULTIPLES) {
     // HACK: when the grid step is big, it can lead to "overshooting" the points
     if (grid.segmentSize * multiple > maxDist / 4) continue
+
+    // We should never exceed the maxGranularSearchSegments
+    const remainingSegDist =
+      Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) /
+      (grid.segmentSize * multiple)
+
+    if (remainingSegDist > grid.maxGranularSearchSegments) continue
 
     const { transformedGrid } = computeGridTransform({ grid, multiple })
     const result = findTwoPointGranularRoute({
@@ -48,6 +59,7 @@ export const findTwoPointMixedGranularityRoute = ({
         allowDiagonal,
       })
       if (startPath.pathFound && endPath.pathFound) {
+        log.end()
         return {
           pathFound: true,
           points: [
@@ -67,7 +79,13 @@ export const findTwoPointMixedGranularityRoute = ({
       }
     }
 
-    if (multiple === 1) return result
+    if (multiple === 1) {
+      log.end()
+      return result
+    }
   }
-  throw new Error("unreachable")
+
+  log.info.not_found = true
+  log.end()
+  return { pathFound: false }
 }

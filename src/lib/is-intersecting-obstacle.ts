@@ -54,7 +54,7 @@ export const isIntersectingObstacle = (params: Parameters): boolean => {
     return u1 <= u2
   }
 
-  if (points.length > 2) {
+  if (points?.length > 2) {
     return (
       isIntersectingObstacle({
         points: points.slice(0, 2),

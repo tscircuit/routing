@@ -1,3 +1,5 @@
+import { LogContextTree } from "./logging/log-context"
+
 export type Obstacle = {
   center: { x: number; y: number }
   width: number
@@ -39,6 +41,7 @@ export type PathFindingParameters = {
   obstacles: Obstacle[]
   grid: Grid
   allowDiagonal?: boolean
+  log?: LogContextTree
 }
 
 export type FoundPath = Path & {

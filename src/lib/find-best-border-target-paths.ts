@@ -1,6 +1,7 @@
 import { computeGridTransform } from "./compute-grid-transform"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
 import { isInObstacle } from "./is-in-obstacle"
+import { LogContextTree, createLogContextTree } from "./logging/log-context"
 import type {
   FoundPath,
   Grid,
@@ -34,6 +35,7 @@ export const findBestBorderTargetPaths = ({
   distantTarget,
   distanceToBorder,
   allowDiagonal,
+  log,
 }: {
   grid: Grid
   obstacles: Obstacle[]
@@ -41,7 +43,9 @@ export const findBestBorderTargetPaths = ({
   distantTarget: Point
   distanceToBorder: number
   allowDiagonal?: boolean
+  log?: LogContextTree
 }): Array<FoundPath & { borderTarget: Point }> => {
+  log ??= createLogContextTree()
   const { roundToNearestGridPoint } = computeGridTransform({ grid })
 
   const borderPoints: Array<{ x: number; y: number; targetDistance: number }> =
@@ -146,5 +150,7 @@ export const findBestBorderTargetPaths = ({
       })
     }
   }
+
+  log.end()
   return resultPaths
 }

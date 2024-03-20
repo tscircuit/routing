@@ -1,18 +1,24 @@
 import type { Grid, Point, Path, Obstacle } from "../lib/types"
 
 type Props = {
-  points: Array<Point>
   grid: Grid
   obstacles: Array<Obstacle>
   paths: Path[]
   viewBox: { width: number; height: number; topLeftX: number; topLeftY: number }
   width: number
   height: number
-}
+} & (
+  | { points: Array<Point>; pointsToConnect?: undefined }
+  | {
+      pointsToConnect: Array<Point>
+      points?: undefined
+    }
+)
 
 export const RouterBoard = ({
   paths,
   points,
+  pointsToConnect,
   grid,
   obstacles,
   width,
@@ -25,6 +31,9 @@ export const RouterBoard = ({
     viewBox.width,
     viewBox.height,
   ].join(" ")
+
+  points ??= pointsToConnect
+  pointsToConnect ??= points
 
   // scale factor, 1 = 1% of width
   const SF = viewBox.width / 100

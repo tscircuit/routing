@@ -1,5 +1,7 @@
 import { findBestBorderTargetPaths } from "./find-best-border-target-paths"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
+import { findTwoPointMixedGranularityRoute } from "./find-two-point-mixed-granularity-route"
+import { createLogContextTree } from "./logging/log-context"
 import type {
   FoundPath,
   PathFindingParameters,
@@ -16,7 +18,9 @@ export const findTwoPointNearBiasRoute = ({
   grid,
   allowDiagonal,
   depth,
+  log,
 }: PathFindingParameters & { depth?: number }): PathFindingResult => {
+  log ??= createLogContextTree()
   if (pointsToConnect.length !== 2)
     throw new Error("Must supply exactly 2 pointsToConnect")
   depth = depth ?? 0
@@ -26,15 +30,36 @@ export const findTwoPointNearBiasRoute = ({
     Math.max(Math.abs(A.x - B.x), Math.abs(A.y - B.y)) / grid.segmentSize
 
   if (remainingSegDist <= grid.maxGranularSearchSegments) {
-    return findTwoPointGranularRoute({
+    const granRoute = findTwoPointGranularRoute({
       pointsToConnect,
       obstacles,
       grid,
       allowDiagonal,
+      log: log.child("2P Granular Route"),
     })
+    log.end()
+    return granRoute
   }
 
-  if (depth > 3) return { pathFound: false, message: "Max depth reached" }
+  // Attempt to find route w/ higher granualarity if it's a middle route (where
+  // precision isn't as important, since it doesn't connect to the end point)
+  const mixedGranRoute = findTwoPointMixedGranularityRoute({
+    pointsToConnect,
+    obstacles,
+    grid,
+    allowDiagonal,
+    log: log.child(`2P Mixed Granularity Route`),
+  })
+  if (mixedGranRoute.pathFound) {
+    log.end()
+    return mixedGranRoute
+  }
+
+  if (depth > 3) {
+    log.info.max_depth = true
+    log.end()
+    return { pathFound: false, message: "Max depth reached" }
+  }
 
   const distanceToBorder = Math.min(
     grid.segmentSize * grid.maxGranularSearchSegments,
@@ -48,6 +73,7 @@ export const findTwoPointNearBiasRoute = ({
     distanceToBorder,
     distantTarget: B,
     allowDiagonal,
+    log: log.child("Border Target Paths A"),
   })
 
   const BBP = findBestBorderTargetPaths({
@@ -57,19 +83,28 @@ export const findTwoPointNearBiasRoute = ({
     distanceToBorder,
     distantTarget: A,
     allowDiagonal,
+    log: log.child("Border Target Paths B"),
   })
 
   // Go through every combination of A border points and B border points, and
   // select the best path
   const routes: FoundPath[] = []
-  for (const abp of ABP) {
-    for (const bbp of BBP) {
+  const bp_log = log.child(
+    `Border Target Matrix Search ${ABP.length * BBP.length}`
+  )
+  for (let abpi = 0; abpi < ABP.length; abpi++) {
+    const abp = ABP[abpi]
+    for (let bbpi = 0; bbpi < BBP.length; bbpi++) {
+      const bbp = BBP[bbpi]
       const middleRoute = findTwoPointNearBiasRoute({
         pointsToConnect: [abp.borderTarget, bbp.borderTarget],
         obstacles,
         grid,
         depth: depth + 1,
         allowDiagonal,
+        log: bp_log.child(
+          `Middle Route ${abpi + 1}x${bbpi + 1}/${ABP.length}x${BBP.length}`
+        ),
       })
       if (middleRoute.pathFound === false) continue
       const fullRoute = {
@@ -86,8 +121,14 @@ export const findTwoPointNearBiasRoute = ({
       routes.push(fullRoute)
     }
   }
-  if (routes.length === 0) return { pathFound: false }
+  bp_log.end()
+  if (routes.length === 0) {
+    log.info.no_routes = true
+    log.end()
+    return { pathFound: false }
+  }
 
+  log.end()
   // Return shortest route
   return routes.reduce((a, b) => (a.length < b.length ? a : b))
 }
