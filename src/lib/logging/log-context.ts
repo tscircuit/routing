@@ -25,7 +25,8 @@ export const getStringifiedTreeLines = (tree: LogContextTree) => {
 
 export const createLogContextTree = ({
   loudEnd,
-}: { loudEnd?: boolean } = {}): LogContextTree => {
+  verbose,
+}: { loudEnd?: boolean; verbose?: boolean } = {}): LogContextTree => {
   const tree: Partial<LogContextTree> = {
     name: "root",
     start_time: Date.now(),
@@ -45,7 +46,9 @@ export const createLogContextTree = ({
   }
   tree.child = (name) => {
     const child = createLogContextTree()
+    if (verbose) console.log(`>${name}`)
     child.name = name
+    child.verbose = verbose
     tree.children.push(child)
     return child
   }

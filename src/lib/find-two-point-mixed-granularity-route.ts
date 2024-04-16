@@ -59,6 +59,8 @@ export const findTwoPointMixedGranularityRoute = ({
         allowDiagonal,
       })
       if (startPath.pathFound && endPath.pathFound) {
+        // TODO If a route is found at a higher multiple, we still need to
+        // connect the beginning and end points at the original granularity
         log.end()
         return {
           pathFound: true,

@@ -6,6 +6,7 @@ import { Grid, Path, PathFindingResult } from "../../lib/types"
 import { findTwoPointMixedGranularityRoute } from "../../lib/find-two-point-mixed-granularity-route"
 import { findTwoPointSchematicRoute } from "../../lib/find-two-point-schematic-route"
 import { findTwoPointNearBiasRoute } from "../../lib"
+import { createLogContextTree } from "../../lib/logging/log-context"
 
 const meta: Meta<typeof RouterBoard> = {
   title: "Schematic Routing/OffGridEndpoint",
@@ -28,27 +29,28 @@ const throwIfNotFound = (path: PathFindingResult): Path => {
 export const Primary = () => {
   const scenario = {
     points: [
-      { x: 10, y: 10 },
+      { x: 10, y: 50 },
       { x: 130, y: 70 },
     ],
     obstacles: [
       {
-        center: { x: 100, y: 60 },
+        center: { x: 50, y: 60 },
         width: 35,
-        height: 10,
+        height: 80,
       },
       {
-        center: { x: 90, y: 70 },
-        width: 15,
+        center: { x: 140, y: 30 },
+        width: 50,
         height: 15,
       },
     ],
     grid: {
-      segmentSize: 20,
+      segmentSize: 5,
       marginSegments: 1,
-      maxGranularSearchSegments: 50,
+      maxGranularSearchSegments: 5,
     } as Grid,
   }
+  const log = createLogContextTree({ loudEnd: true, verbose: true })
   return (
     <RouterBoard
       {...{
@@ -59,6 +61,7 @@ export const Primary = () => {
               ...scenario,
               pointsToConnect: scenario.points,
               allowDiagonal: false,
+              log,
             })
           ),
         ],

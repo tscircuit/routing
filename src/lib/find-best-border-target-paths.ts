@@ -74,6 +74,10 @@ export const findBestBorderTargetPaths = ({
     }
   }
 
+  if (borderPoints.length === 0) {
+    return []
+  }
+
   // De-dupe border points that are contiguous
   const contiguousBorderPoints: Array<typeof borderPoints> = [[borderPoints[0]]]
   for (let i = 1; i < borderPoints.length; i++) {
