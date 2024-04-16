@@ -62,20 +62,20 @@ const scenario = {
 
 import type { Meta, StoryObj } from "@storybook/react"
 
-import { RouterBoard } from "../components/RouterBoard"
-import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
-import { Grid, Path, PathFindingResult } from "../lib/types"
-import { findTwoPointMixedGranularityRoute } from "../lib/find-two-point-mixed-granularity-route"
-import { findTwoPointSchematicRoute } from "../lib/find-two-point-schematic-route"
+import { RouterBoard } from "../../components/RouterBoard"
+import { findTwoPointGranularRoute } from "../../lib/find-two-point-granular-route"
+import { Grid, Path, PathFindingResult } from "../../lib/types"
+import { findTwoPointMixedGranularityRoute } from "../../lib/find-two-point-mixed-granularity-route"
+import { findTwoPointSchematicRoute } from "../../lib/find-two-point-schematic-route"
 import {
   findSchematicRoute,
   findTwoPointNearBiasRoute,
   movePointsOutsideObstacles,
-} from "../lib"
-import { createLogContextTree } from "../lib/logging/log-context"
+} from "../../lib"
+import { createLogContextTree } from "../../lib/logging/log-context"
 
 const meta: Meta<typeof RouterBoard> = {
-  title: "Routing/SlowRouting1",
+  title: "Schematic Routing/SlowRouting1",
   component: RouterBoard,
   tags: [],
   argTypes: {},

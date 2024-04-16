@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react"
 
-import { RouterBoard } from "../components/RouterBoard"
-import { findTwoPointGranularRoute } from "../lib/find-two-point-granular-route"
-import { Grid, Path, PathFindingResult } from "../lib/types"
-import { findTwoPointMixedGranularityRoute } from "../lib/find-two-point-mixed-granularity-route"
-import { findTwoPointSchematicRoute } from "../lib/find-two-point-schematic-route"
-import { findTwoPointNearBiasRoute } from "../lib"
+import { RouterBoard } from "../../components/RouterBoard"
+import { findTwoPointGranularRoute } from "../../lib/find-two-point-granular-route"
+import { Grid, Path, PathFindingResult } from "../../lib/types"
+import { findTwoPointMixedGranularityRoute } from "../../lib/find-two-point-mixed-granularity-route"
+import { findTwoPointSchematicRoute } from "../../lib/find-two-point-schematic-route"
+import { findTwoPointNearBiasRoute } from "../../lib"
 
 const meta: Meta<typeof RouterBoard> = {
-  title: "Routing/SchematicStyleRoute",
+  title: "Schematic Routing/OffGridEndpoint",
   component: RouterBoard,
   tags: [],
   argTypes: {},
@@ -29,7 +29,7 @@ export const Primary = () => {
   const scenario = {
     points: [
       { x: 10, y: 10 },
-      { x: 130, y: 80 },
+      { x: 130, y: 70 },
     ],
     obstacles: [
       {
@@ -44,7 +44,7 @@ export const Primary = () => {
       },
     ],
     grid: {
-      segmentSize: 5,
+      segmentSize: 20,
       marginSegments: 1,
       maxGranularSearchSegments: 50,
     } as Grid,
@@ -61,16 +61,6 @@ export const Primary = () => {
               allowDiagonal: false,
             })
           ),
-          {
-            ...throwIfNotFound(
-              findTwoPointNearBiasRoute({
-                ...scenario,
-                pointsToConnect: scenario.points,
-                allowDiagonal: false,
-              })
-            ),
-            color: "rgba(0, 0, 255, 0.2)",
-          } as any,
         ],
         viewBox: {
           topLeftX: 0,
