@@ -94,15 +94,16 @@ export const findTwoPointGranularRoute = ({
     endNode.y,
     gridMatrix
   )
-  console.log(
-    encodeDebugGridString(
-      startNode.x,
-      startNode.y,
-      endNode.x,
-      endNode.y,
-      gridMatrix
-    )
-  )
+  // Logs a URL to inspect the input to the pathfinder
+  // console.log(
+  //   `http://localhost:6006/?path=/story/routerboard-debug-granular-route--primary&dgs=${encodeDebugGridString(
+  //     startNode.x,
+  //     startNode.y,
+  //     endNode.x,
+  //     endNode.y,
+  //     gridMatrix
+  //   )}`
+  // )
 
   // If a path can't be found, return an empty path
   if (path.length === 0) {

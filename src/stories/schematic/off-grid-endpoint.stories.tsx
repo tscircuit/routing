@@ -46,8 +46,8 @@ export const Primary = () => {
     ],
     grid: {
       segmentSize: 5,
-      marginSegments: 1,
-      maxGranularSearchSegments: 200,
+      marginSegments: 4,
+      maxGranularSearchSegments: 10,
     } as Grid,
   }
   const log = createLogContextTree({ loudEnd: true, verbose: false })
