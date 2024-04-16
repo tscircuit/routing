@@ -34,7 +34,7 @@ export const Primary = () => {
     ],
     obstacles: [
       {
-        center: { x: 50, y: 60 },
+        center: { x: 50, y: 80 },
         width: 35,
         height: 80,
       },
@@ -46,11 +46,11 @@ export const Primary = () => {
     ],
     grid: {
       segmentSize: 5,
-      marginSegments: 1,
-      maxGranularSearchSegments: 5,
+      marginSegments: 4,
+      maxGranularSearchSegments: 10,
     } as Grid,
   }
-  const log = createLogContextTree({ loudEnd: true, verbose: true })
+  const log = createLogContextTree({ loudEnd: true, verbose: false })
   return (
     <RouterBoard
       {...{

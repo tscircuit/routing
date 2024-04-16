@@ -30,6 +30,9 @@ export const findTwoPointNearBiasRoute = ({
     Math.max(Math.abs(A.x - B.x), Math.abs(A.y - B.y)) / grid.segmentSize
 
   if (remainingSegDist <= grid.maxGranularSearchSegments) {
+    console.log(
+      "skipping mixed granularity, route is within max granular search segments"
+    )
     const granRoute = findTwoPointGranularRoute({
       pointsToConnect,
       obstacles,
