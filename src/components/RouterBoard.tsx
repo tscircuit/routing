@@ -8,9 +8,9 @@ type Props = {
   width: number
   height: number
 } & (
-  | { points: Array<Point>; pointsToConnect?: undefined }
+  | { points: readonly Point[]; pointsToConnect?: undefined }
   | {
-      pointsToConnect: Array<Point>
+      pointsToConnect: readonly Point[]
       points?: undefined
     }
 )

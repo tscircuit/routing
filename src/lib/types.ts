@@ -41,7 +41,7 @@ export type Grid = {
 }
 
 export type PathFindingParameters = {
-  pointsToConnect: Point[]
+  pointsToConnect: readonly Point[]
   obstacles: Obstacle[]
   grid: Grid
   allowDiagonal?: boolean

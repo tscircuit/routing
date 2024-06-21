@@ -30,11 +30,11 @@ export const Primary = () => {
     points: [
       { x: 10, y: 10, directionBias: "up" },
       { x: 130, y: 80, directionBias: "down" },
-    ],
+    ] as const,
     obstacles: [
       {
         center: { x: 100, y: 60 },
-        width: 35,
+        width: 55,
         height: 10,
       },
       {

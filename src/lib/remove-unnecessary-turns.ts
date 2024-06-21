@@ -68,7 +68,7 @@ export const removeUnnecessaryTurns = ({
 
       if (
         isAlignedWithDirectionBias(A, flipped2ndPoint) &&
-        !isIntersectingObstacle({ obstacles, points: [A, flipped2ndPoint] })
+        !isIntersectingObstacle({ obstacles, points: [A, flipped2ndPoint, C] })
       ) {
         newPoints = [A, flipped2ndPoint]
       }
@@ -82,7 +82,10 @@ export const removeUnnecessaryTurns = ({
       const flipped2ndLastPoint = getFlippedMiddlePoint(A, B, C)
       if (
         isAlignedWithDirectionBias(C, flipped2ndLastPoint) &&
-        !isIntersectingObstacle({ obstacles, points: [flipped2ndLastPoint, C] })
+        !isIntersectingObstacle({
+          obstacles,
+          points: [A, flipped2ndLastPoint, C],
+        })
       ) {
         points[points.length - 2] = flipped2ndLastPoint
       }
@@ -132,15 +135,10 @@ export const removeUnnecessaryTurns = ({
 
     // The path to B_opt is more optimal because it has one less turn, but does
     // it hit any obstacles?
-    const newPathPossible =
-      !isIntersectingObstacle({
-        obstacles,
-        points: [A, B_opt],
-      }) &&
-      !isIntersectingObstacle({
-        obstacles,
-        points: [B_opt, C],
-      })
+    const newPathPossible = !isIntersectingObstacle({
+      obstacles,
+      points: [A, B_opt, C],
+    })
 
     if (newPathPossible) {
       newPoints.push(B_opt)
