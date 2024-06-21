@@ -1,82 +1,8 @@
 import { findTwoPointNearBiasRoute } from "./find-two-point-near-bias-route"
-import { isIntersectingObstacle } from "./is-intersecting-obstacle"
-import { LogContextTree, createLogContextTree } from "./logging/log-context"
+import { createLogContextTree } from "./logging/log-context"
 import { removeUnnecessaryPoints } from "./remove-unnecessary-points"
-import {
-  Obstacle,
-  PathFindingParameters,
-  PathFindingResult,
-  Point,
-} from "./types"
-
-const removeUnnecessaryTurns = ({
-  points,
-  obstacles,
-  log,
-}: {
-  points: Point[]
-  obstacles: Obstacle[]
-  log?: LogContextTree
-}): Point[] => {
-  log ??= createLogContextTree()
-  if (points.length <= 3) {
-    log.end()
-    return points
-  }
-
-  const newPoints = [points[0], points[1]]
-
-  // Walk the route, if there's an unnecessary turn, check that the route
-  // doesn't hit an obstacle and move on
-  for (let i = 1; i < points.length - 3; i++) {
-    const P = newPoints[i - 1]
-
-    const A = newPoints[i]
-    const B = points[i + 1]
-    const C = points[i + 2]
-
-    // Are P -> A -> B all on the same line (the turn was changed?)
-
-    if (P.x === A.x && A.x === B.x) {
-      newPoints.push(B)
-      continue
-    }
-    if (P.y === A.y && A.y === B.y) {
-      newPoints.push(B)
-      continue
-    }
-
-    const B_opt =
-      A.x === B.x
-        ? { x: C.x, y: A.y }
-        : {
-            x: A.x,
-            y: C.y,
-          }
-
-    // The path to B_opt is more optimal because it has one less turn, but does
-    // it hit any obstacles?
-
-    const newPathPossible =
-      !isIntersectingObstacle({
-        obstacles,
-        points: [A, B_opt],
-      }) &&
-      !isIntersectingObstacle({
-        obstacles,
-        points: [B_opt, C],
-      })
-
-    if (newPathPossible) {
-      newPoints.push(B_opt)
-    } else {
-      newPoints.push(B)
-    }
-  }
-  newPoints.push(...points.slice(-2))
-  log.end()
-  return newPoints
-}
+import { removeUnnecessaryTurns } from "./remove-unnecessary-turns"
+import { PathFindingParameters, PathFindingResult } from "./types"
 
 /**
  * Find a the optimal route between two points with as few unnecessary turns
@@ -107,6 +33,26 @@ export const findTwoPointSchematicRoute = ({
 
   if (!route.pathFound) return { pathFound: false }
 
+  // Copy over directionBiases by finding
+  // any original point with a direction bias, then adding the bias to the
+  // nearest point on the path
+  for (const pointToConnect of pointsToConnect) {
+    if (!pointToConnect.directionBias) continue
+    const nearestPoint = route.points.reduce(
+      (nearest, point) => {
+        const dist = Math.hypot(
+          point.x - pointToConnect.x,
+          point.y - pointToConnect.y
+        )
+        if (dist < nearest.dist) return { point, dist }
+        return nearest
+      },
+      { point: route.points[0], dist: Infinity }
+    ).point
+    nearestPoint.directionBias = pointToConnect.directionBias
+  }
+
+  // Remove unnecessary turns (this makes it schematic-like)
   let currentBest = route.points
   const tr_log = log.child("Remove Unnecessary Turns")
   let iters = 0
