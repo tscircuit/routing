@@ -5,6 +5,7 @@ export interface LogContextTree {
   duration?: number
   children: LogContextTree[]
   info: any
+  verbose?: boolean
 
   start: (info: any) => void
   child: (name: string) => LogContextTree
