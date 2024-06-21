@@ -6,10 +6,14 @@ export type Obstacle = {
   height: number
 }
 
-export type Point = { x: number; y: number }
+export type Point = {
+  x: number
+  y: number
+  directionBias?: "up" | "down" | "left" | "right"
+}
 
 export type Path = {
-  points: Array<{ x: number; y: number }>
+  points: Array<Point>
   width: number
 }
 

@@ -41,7 +41,15 @@ export const RouterBoard = ({
   return (
     <div>
       {" "}
-      <svg width={width} height={height} viewBox={svgViewBox}>
+      <svg
+        width={width}
+        height={height}
+        viewBox={svgViewBox}
+        // Flip to regular cartesian coordinates where y+ is up
+        style={{
+          transform: "scaleY(-1)",
+        }}
+      >
         {/* Render grid */}
         {Array.from({
           length: Math.ceil(width / grid.segmentSize) + 1,
