@@ -60,7 +60,7 @@ export const isIntersectingObstacle = (params: Parameters): boolean => {
         points: points.slice(0, 2),
         obstacles,
         margin,
-      }) &&
+      }) ||
       isIntersectingObstacle({
         points: points.slice(1),
         obstacles,
