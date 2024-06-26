@@ -42,6 +42,11 @@ export const Primary = () => {
         width: 15,
         height: 15,
       },
+      {
+        center: { x: 30, y: 30 },
+        width: 15,
+        height: 55,
+      },
     ],
     grid: {
       segmentSize: 5,
