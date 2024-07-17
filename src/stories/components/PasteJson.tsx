@@ -47,6 +47,9 @@ export const PasteJson = ({ initialJson }: { initialJson?: any }) => {
     w: (8 / 5) * 100,
     h: 100,
   })
+  const [viewBoxText, setViewBoxText] = useState(
+    [viewBox.x, viewBox.y, viewBox.w, viewBox.h].join(",")
+  )
   const [options, setOptions] = useState({ movePointsOutsideObstacles: false })
 
   const Board = () => {
@@ -103,6 +106,43 @@ export const PasteJson = ({ initialJson }: { initialJson?: any }) => {
           style={{ flexGrow: 1, height: 200 }}
           defaultValue={textAreaJson}
           onChange={(e) => {
+            console.log(e.target.value.length - textAreaJson.length)
+            if (e.target.value.length - textAreaJson.length > 100) {
+              // reset viewbox to view the entire board
+              try {
+                const { obstacles = [], pointsToConnect = [] } = JSON.parse(e.target.value)
+
+                let minX = Infinity
+                let minY = Infinity
+                let maxX = -Infinity
+                let maxY = -Infinity
+
+                for (const point of pointsToConnect) {
+                  minX = Math.min(minX, point.x)
+                  minY = Math.min(minY, point.y)
+                  maxX = Math.max(maxX, point.x)
+                  maxY = Math.max(maxY, point.y)
+                }
+
+                for (const obstacle of obstacles) {
+                  minX = Math.min(minX, obstacle.center.x - obstacle.width / 2)
+                  minY = Math.min(minY, obstacle.center.y - obstacle.height / 2)
+                  maxX = Math.max(maxX, obstacle.center.x + obstacle.width / 2)
+                  maxY = Math.max(maxY, obstacle.center.y + obstacle.height / 2)
+                }
+
+                setViewBox({
+                  x: minX,
+                  y: minY,
+                  w: maxX - minX,
+                  h: maxY - minY,
+                })
+                setViewBoxText([minX, minY, maxX - minX, maxY - minY].join(","))
+              } catch (e) {
+                console.log(e)
+              }
+
+            }
             setTextAreaJson(e.target.value)
           }}
         ></textarea>
@@ -141,10 +181,9 @@ export const PasteJson = ({ initialJson }: { initialJson?: any }) => {
             viewbox (x,y,w,h):{" "}
             <input
               type="text"
-              defaultValue={[viewBox.x, viewBox.y, viewBox.w, viewBox.h].join(
-                ","
-              )}
+              value={viewBoxText}
               onChange={(e) => {
+                setViewBoxText(e.target.value)
                 try {
                   const [x, y, w, h] = e.target.value.split(",").map(parseFloat)
                   if ([x, y, w, h].some(isNaN))
