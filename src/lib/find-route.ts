@@ -2,6 +2,7 @@ import * as PF from "pathfinding"
 import { findTwoPointGranularRoute } from "./find-two-point-granular-route"
 import type { Point, Obstacle, Path, Grid, PathFindingResult } from "./types"
 import { findTwoPointNearBiasRoute } from "./find-two-point-near-bias-route"
+import { mergeSameNetTraces } from '../trace-merger';
 
 type Parameters = {
   pointsToConnect: Point[]
@@ -56,7 +57,20 @@ export const findRoute = ({
     }
   }
 
-  return pathFound
-    ? { points, length: totalLength, width: 1, pathFound: true }
-    : { pathFound: false }
+  if (!pathFound) {
+    return { pathFound: false }
+  }
+
+  // Объединяем близкие линии трассировки одной сети (Issue #34)
+  const singleTrace = {
+    id: 'routed-trace',
+    netId: 'net1',
+    points: points,
+    width: 1
+  }
+  
+  const mergedTraces = mergeSameNetTraces([singleTrace], 0.1)
+  const mergedPoints = mergedTraces.length > 0 ? mergedTraces[0].points : points
+
+  return { points: mergedPoints, length: totalLength, width: 1, pathFound: true }
 }
